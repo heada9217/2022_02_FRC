@@ -26,4 +26,4 @@ get_int = num_check("how many?: ", 'Please enter a whole number larger than zero
 
 get_cost = num_check("How much does it cost?: $", "Please enter a whole number larger than zero.", float)
 
-print("You need: {} /n It costs: ${}").format(get_int,get_cost)
+print("You need: {} /n It costs: ${}".format(get_int,get_cost))
