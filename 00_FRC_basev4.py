@@ -1,5 +1,6 @@
 # import libraries
 import pandas
+import math
 
 # *** Functions go here ***
 
@@ -184,10 +185,18 @@ def profit_goal(total_costs):
             goal = (amount / 100) * total_costs
             return goal
 
+def round_up(amount, var_round_to):
+
+
+    return math.ceil(amount / var_round_to) * var_round_to
+
         
 # *** Main Routine goes here *** 
 #Get user data 
 product_name = not_blank("Product name: ", "The product name cannot be blank")
+how_many = num_check("How many items will you be producing?"," The number of items must be a whole number more than zero", int)
+
+
 print()
 print("Please enter your variable costs below...")
 
@@ -211,8 +220,21 @@ else:
 all_costs = variable_sub + fixed_sub
 profit_target = profit_goal(all_costs)
 
+#Calcvulates totals sales needed to reach goal
+all_costs = variable_sub + fixed_sub
+profit_target = profit_goal(all_costs)
+
+#Calculates toal sales needed to reach goal
+sales_needed = all_costs + profit_target
+
+#Ask user for rounding 
+round_to = num_check("Round to nearest...? $", "Can't be 0", int)
+
 #Calculate recommended price
-selling_price = 0
+selling_price = sales_needed / how_many
+print("Selling Price (unrounded: ${:.2f}".format(selling_price))
+
+recommended_price = round_up(selling_price, round_to)
 #Find Total Costs
 
 #Ask user for profit goal
@@ -241,5 +263,7 @@ print("Profit Target:${: .2f}".format(profit_target))
 print("Total Sales: ${: .2f}".format(all_costs + profit_target))
 
 print()
-print("*** Recommended Selling Price: ""${: .2f}".format(selling_price))
+print("*** Pricing ***")
+print("Minimum Price: {:.2f}".format(selling_price))
+print("Recommended Price: ${:.2f}".format(recommended_price))
 
