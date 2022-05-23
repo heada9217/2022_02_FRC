@@ -1,4 +1,4 @@
-# import libraries
+#import libraries
 import pandas
 import math
 
@@ -132,7 +132,7 @@ def profit_goal(total_costs):
     while not valid:
 
         #Ask for profit goal...
-        response = input("What is your profit goal (eg $500 or %50)")
+        response = input("What is your profit goal? (eg $500 or %50):")
 
         #check if first character is $...
         if response[0] == "$":
@@ -157,15 +157,16 @@ def profit_goal(total_costs):
             if amount <= 0:
                 print(error)
                 continue
+        
         except ValueError:
             print(error)
             continue
         
         if profit_type == "unknown" and amount >= 100:
-            dollar_type = yes_no("Do you mean ${:.2f}." "ie {:.2f} dollars? , y/n".format(amount,amount))
+            dollar_type = yes_no("Do you mean ${:.2f}?, y/n".format(amount))
 
 
-            #Set progit type based on user answer above
+            #Set profit type based on user answer above
             if dollar_type == "yes":
                 profit_type = "$"
             else:
@@ -190,8 +191,25 @@ def round_up(amount, var_round_to):
 
     return math.ceil(amount / var_round_to) * var_round_to
 
-        
-# *** Main Routine goes here *** 
+def instructions():
+    
+    show_help = yes_no("Do you want to see the instructions?")
+
+    if show_help == "yes":
+        print()
+        print("*** Fundraising Calculator Instructions ***")
+        print()
+        print("This program will help you to:")
+        print()
+        print("- ")
+
+    return ""    
+
+
+# *** Main Routine goes here ***
+#ask user if they want instructions
+want_instructions = instructions()
+
 #Get user data 
 product_name = not_blank("Product name: ", "The product name cannot be blank")
 how_many = num_check("How many items will you be producing?"," The number of items must be a whole number more than zero", int)
@@ -220,10 +238,6 @@ else:
 all_costs = variable_sub + fixed_sub
 profit_target = profit_goal(all_costs)
 
-#Calcvulates totals sales needed to reach goal
-all_costs = variable_sub + fixed_sub
-profit_target = profit_goal(all_costs)
-
 #Calculates toal sales needed to reach goal
 sales_needed = all_costs + profit_target
 
@@ -235,6 +249,7 @@ selling_price = sales_needed / how_many
 print("Selling Price (unrounded: ${:.2f}".format(selling_price))
 
 recommended_price = round_up(selling_price, round_to)
+
 #Find Total Costs
 
 #Ask user for profit goal
@@ -242,28 +257,76 @@ recommended_price = round_up(selling_price, round_to)
 #Calculate recommended price
 
 #Write data to file
+#Change frames to strings
+variable_txt = pandas.DataFrame.to_string(variable_frame)
+fixed_txt = pandas.DataFrame.to_string(fixed_frame)
+
+product_heading = "***** {} *****".format(product_name)
+variable_costs_heading = "\n--- Variable Costs ---"
+
+if have_fixed == "yes":
+    fixed_costs_heading = "\n--- Fixed Costs ---"
+else:
+    fixed_costs_heading = ""
+
+sales_advice_heading = "\n--- Sales Advice ---"
+
+profit_target = "Profit Target: ${:.2f}".format(profit_target)
+sales_needed = "Total Sales Needed: ${:.2f}".format(sales_needed)
+recommended_price = "Recommended Price: ${:.2f}".format(recommended_price)
+
+var_costs_subtotal = "\n Variable Costs Subtotal: ${:.2f}".format(variable_sub)
+
+if have_fixed == "yes":
+    fixed_costs_subtotal = "\n Fixed Costs Subtotal: ${:.2f}".format(fixed_sub)
+else:
+    fixed_costs_subtotal = ""
+
+#list holding stuff to print / write to file 
+to_write = [product_heading, variable_costs_heading, variable_txt, var_costs_subtotal, fixed_costs_heading, fixed_txt, fixed_costs_subtotal, sales_advice_heading, profit_target, sales_needed, recommended_price]
+
+#Write to file...
+#create file to hold data(add .txt extension)
+file_name = "{}.txt".format(product_name)
+text_file = open(file_name, "w+")
+
+#heading
+for item in to_write:
+    text_file.write(item)
+    text_file.write("\n\n")
+
+
+
+
+#close file 
+text_file.close()
+
+#Print Stuff
+for item in to_write:
+    print(item)
+    print()
 
 #*** Printing Area ***
 
-print()
-print("*** Fund Raising  - {} ***".format(product_name))
-print()
-expense_print("Variable", variable_frame, variable_sub)
+# print()
+# print("*** Fund Raising  - {} ***".format(product_name))
+# print()
+# expense_print("Variable", variable_frame, variable_sub)
 
-if have_fixed == "yes":
-    expense_print("Fixed", fixed_frame[["Cost"]], fixed_sub) 
+# if have_fixed == "yes":
+#     expense_print("Fixed", fixed_frame[["Cost"]], fixed_sub) 
 
-print()
-print("*** Total Costs: ${: .2f} ***".format(all_costs))
-print()
+# print()
+# print("*** Total Costs: ${: .2f} ***".format(all_costs))
+# print()
 
-print()
-print("*** Profit and Sales Targets ***")
-print("Profit Target:${: .2f}".format(profit_target))
-print("Total Sales: ${: .2f}".format(all_costs + profit_target))
+# print()
+# print("*** Profit and Sales Targets ***")
+# print("Profit Target:${: .2f}".format(profit_target))
+# print("Total Sales: ${: .2f}".format(all_costs + profit_target))
 
-print()
-print("*** Pricing ***")
-print("Minimum Price: {:.2f}".format(selling_price))
-print("Recommended Price: ${:.2f}".format(recommended_price))
+# print()
+# print("*** Pricing ***")
+# print("Minimum Price: {:.2f}".format(selling_price))
+# print("Recommended Price: ${:.2f}".format(recommended_price))
 

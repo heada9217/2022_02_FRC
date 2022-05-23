@@ -2,6 +2,7 @@ import pandas
 
 #Frames and content for export
 
+
 variable_dict = {
     "Item": ["Mugs", "Printing", "Packaging"],
     "Quantity": [300, 300, 50],
@@ -18,7 +19,7 @@ fixed_frame = pandas.DataFrame(fixed_dict)
 
 #Change frames to strings
 variable_txt = pandas.DataFrame.to_string(variable_frame)
-fixed_txt = pandas.DataFrame(fixed_dict)
+fixed_txt = pandas.DataFrame.to_string(fixed_frame)
 
 product_name = "Custom Mugs"
 profit_target = "$100.00"
